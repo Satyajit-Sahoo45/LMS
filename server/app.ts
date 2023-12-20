@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import { ErrorMiddleware } from "./middleware/error";
 import userRouter from "./routes/user.route";
 import courseRouter from "./routes/course.route";
+import orderRouter from "./routes/order.route";
 import bodyParser from "body-parser";
 
 // body parser
@@ -24,6 +25,7 @@ app.use(
 // route
 app.use("/api/v1", userRouter);
 app.use("/api/v1", courseRouter);
+app.use("/api/v1", orderRouter);
 
 // testing api
 app.get("/test", (req: Request, res: Response, next: NextFunction) => {
