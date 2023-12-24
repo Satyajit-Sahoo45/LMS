@@ -76,7 +76,7 @@ export const createOrder = CatchAsyncError(
       await user?.save();
 
       await NotificationModel.create({
-        user: user?.id,
+        user: user?._id,
         title: "New Order",
         message: `You have a new order from ${course?.name}`,
       });
