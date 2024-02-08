@@ -20,11 +20,12 @@ const Hero: FC<Props> = (props) => {
       </div>
       <div className="1000px:w-[60%] flex flex-col items-center 1000px:mt-[0px] text-center 1000px:text-left mt-[150px]">
         <h2 className="dark:text-white text-[#000000c7] text-[2px] px-3 w-full 1000px:text-[70px] font-[600] font-sans py-2 1000px:leading-[75px] 1500px:w-[60%] 1100px:w-[78%]">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          Improve Your Online Learning Experience Better Instantly
         </h2>
         <br />
         <p className="dark:text-[#edfff4] text-[#000000ac] font-sans font-[600] text-[18px] 1500px:!w-[55%] 1100px:!w-[78%]">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+          We have 40k+ Online courses and 500k+ Online registerd student. Find
+          your desired Courses from them.
         </p>
         <br />
         <br />
