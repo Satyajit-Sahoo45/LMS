@@ -32,7 +32,7 @@ userRouter.get("/me", isAuthenticated, getUserInfo);
 
 userRouter.post("/social-auth", socialAuth);
 
-userRouter.post("/update-user-info", isAuthenticated, updateUserInfo);
+userRouter.put("/update-user-info", isAuthenticated, updateUserInfo);
 
 userRouter.put("/update-user-password", isAuthenticated, updatePassword);
 

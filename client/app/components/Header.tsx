@@ -13,8 +13,12 @@ import { useSelector } from "react-redux";
 import Image from "next/image";
 import avatar from "../../public/assests/avatar.png";
 import { useSession } from "next-auth/react";
-import { useSocialAuthMutation } from "@/redux/features/auth/authApi";
+import {
+  useLogOutQuery,
+  useSocialAuthMutation,
+} from "../../redux/features/auth/authApi";
 import toast from "react-hot-toast";
+import { useLoadUserQuery } from "../../redux/features/api/apiSlice";
 
 type Props = {
   open: boolean;
@@ -27,12 +31,22 @@ type Props = {
 const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
+  const {
+    data: userData,
+    isLoading,
+    refetch,
+  } = useLoadUserQuery(undefined, {});
   const { user } = useSelector((state: any) => state.auth);
   const { data } = useSession();
   const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
+  const [logout, setLogout] = useState(false);
+
+  const {} = useLogOutQuery(undefined, {
+    skip: !logout ? true : false,
+  });
 
   useEffect(() => {
-    if (!user) {
+    if (!userData) {
       if (data) {
         socialAuth({
           email: data?.user?.email,
@@ -42,10 +56,16 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
       }
     }
 
-    if (isSuccess) {
-      toast.success("Login Successfully!");
+    if (data === null) {
+      if (isSuccess) {
+        toast.success("Login Successfully!");
+      }
     }
-  }, [data, user]);
+
+    if (data === null && !isLoading && !userData) {
+      setLogout(true);
+    }
+  }, [data, userData, isLoading]);
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
@@ -88,12 +108,19 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                   onClick={() => setOpenSidebar(true)}
                 />
               </div>
-              {user ? (
-                <Link href="/profile">
+              {userData ? (
+                <Link href={"/profile"}>
                   <Image
-                    src={user.avatar ? user.avatar : avatar}
+                    src={
+                      userData?.user.avatar ? userData.user.avatar.url : avatar
+                    }
                     alt=""
+                    width={30}
+                    height={30}
                     className="w-[30px] h-[30px] rounded-full cursor-pointer"
+                    style={{
+                      border: activeItem === 5 ? "2px solid #37a39a" : "none",
+                    }}
                   />
                 </Link>
               ) : (
