@@ -1,4 +1,5 @@
 import { styles } from "@/app/styles/style";
+import { useUpdatePasswordMutation } from "../../../redux/features/user/userApi";
 import React, { FC, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
@@ -8,6 +9,28 @@ const ChangePassword: FC<Props> = (props) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [updatePassword, { isSuccess, error }] = useUpdatePasswordMutation();
+
+  const passwordChangeHandler = async (e: any) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      toast.error("Passwords do not match");
+    } else {
+      await updatePassword({ oldPassword, newPassword });
+    }
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Password changed successfully");
+    }
+    if (error) {
+      if ("data" in error) {
+        const errorData = error as any;
+        toast.error(errorData.data.message);
+      }
+    }
+  }, [isSuccess, error]);
 
   return (
     <div className="w-full pl-7 px-2 800px:px-5 800px:pl-0">
@@ -17,7 +40,7 @@ const ChangePassword: FC<Props> = (props) => {
       <div className="w-full">
         <form
           //   aria-required
-          onSubmit={() => {}}
+          onSubmit={passwordChangeHandler}
           className="flex flex-col items-center"
         >
           <div className=" w-[100%] 800px:w-[60%] mt-5">

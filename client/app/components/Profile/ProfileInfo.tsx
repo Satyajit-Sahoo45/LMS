@@ -57,8 +57,6 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
     }
   };
 
-  console.log(user);
-  console.log(avatar);
   return (
     <>
       <div className="w-full flex justify-center">
