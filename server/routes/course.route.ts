@@ -11,12 +11,15 @@ import {
   addReplyToReview,
   getAllCoursess,
   deleteCourse,
+  generateVideoUrl,
 } from "../controllers/course.controller";
 import { authorizeRoles, isAuthenticated } from "../middleware/auth";
+import { updateAccessToken } from "../controllers/user.controller";
 const courseRouter = express.Router();
 
 courseRouter.post(
   "/create-course",
+  updateAccessToken,
   isAuthenticated,
   authorizeRoles("admin"),
   uploadCourse
@@ -54,6 +57,8 @@ courseRouter.get(
   authorizeRoles("admin"),
   getAllCoursess
 );
+
+courseRouter.post("/getVdoCipherOTP", generateVideoUrl);
 
 courseRouter.delete(
   "/delete-course/:id",
