@@ -122,9 +122,9 @@ export const newPayment = CatchAsyncError(
       const myPayment = await stripe.paymentIntents.create({
         amount: req.body.amount,
         currency: "USD",
-        description: "E-learning course services",
+        description: "LMS course services",
         metadata: {
-          company: "E-Learning",
+          company: "LMS",
         },
         automatic_payment_methods: {
           enabled: true,
