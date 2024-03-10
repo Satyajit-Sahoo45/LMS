@@ -19,8 +19,6 @@ const EditCategories = (props: Props) => {
     useEditLayoutMutation();
   const [categories, setCategories] = useState<any>([]);
 
-  console.log(data, "data");
-
   useEffect(() => {
     if (data) {
       setCategories(data.layout?.categories);

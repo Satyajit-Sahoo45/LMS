@@ -111,6 +111,7 @@ export const editLayout = CatchAsyncError(
 
       if (type === "FAQ") {
         const { faq } = req.body;
+        const FaqItem = await LayoutModel.findOne({ type: "FAQ" });
         const faqItems = await Promise.all(
           faq.map(async (item: any) => {
             return {
@@ -119,10 +120,16 @@ export const editLayout = CatchAsyncError(
             };
           })
         );
-        await LayoutModel.create({ type: "FAQ", faq: faqItems });
+        await LayoutModel.findByIdAndUpdate(FaqItem?._id, {
+          type: "FAQ",
+          faq: faqItems,
+        });
       }
       if (type === "Categories") {
         const { categories } = req.body;
+        const CategoriesItem = await LayoutModel.findOne({
+          type: "Categories",
+        });
         const categoriesItems = await Promise.all(
           categories.map(async (item: any) => {
             return {
@@ -130,7 +137,7 @@ export const editLayout = CatchAsyncError(
             };
           })
         );
-        await LayoutModel.create({
+        await LayoutModel.findByIdAndUpdate(CategoriesItem?._id, {
           type: "Categories",
           categories: categoriesItems,
         });
