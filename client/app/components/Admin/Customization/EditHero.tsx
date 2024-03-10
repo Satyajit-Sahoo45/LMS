@@ -77,7 +77,7 @@ const EditHero: FC<Props> = (props: Props) => {
               onChange={handleUpdate}
               className="hidden"
             />
-            <label htmlFor="banner" className="absolute bottom-0 right-0 z-20">
+            <label htmlFor="banner" className="absolute bottom-0 right-0 z-50">
               <AiOutlineCamera className="dark:text-white text-black text-[18px] cursor-pointer" />
             </label>
           </div>

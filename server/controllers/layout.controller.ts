@@ -25,12 +25,15 @@ export const createLayout = CatchAsyncError(
         });
 
         const banner = {
-          image: {
-            public_id: myCloud.public_id,
-            url: myCloud.url,
+          type: "Banner",
+          banner: {
+            image: {
+              public_id: myCloud.public_id,
+              url: myCloud.url,
+            },
+            title,
+            subTitle,
           },
-          title,
-          subTitle,
         };
 
         await LayoutModel.create(banner);
@@ -83,18 +86,21 @@ export const editLayout = CatchAsyncError(
         const bannerData: any = await LayoutModel.findOne({ type: "Banner" });
         const { image, title, subTitle } = req.body;
 
-        if (bannerData) {
-          await cloudinary.v2.uploader.destroy(bannerData.image.public_id);
-        }
-
-        const myCloud = await cloudinary.v2.uploader.upload(image, {
-          folder: "layout",
-        });
+        const data = image.startsWith("https")
+          ? bannerData
+          : await cloudinary.v2.uploader.upload(image, {
+              folder: "layout",
+            });
 
         const banner = {
+          type: "Banner",
           image: {
-            public_id: myCloud.public_id,
-            url: myCloud.url,
+            public_id: image.startsWith("https")
+              ? bannerData.banner.image.public_id
+              : data?.public_id,
+            url: image.startsWith("https")
+              ? bannerData.banner.image.url
+              : data?.secure_url,
           },
           title,
           subTitle,
