@@ -35,6 +35,7 @@ interface ICourseData extends Document {
 interface ICourse extends Document {
   name: string;
   description: string;
+  categories: string;
   price: number;
   estimatedPrice?: number;
   thumbnail: object;
