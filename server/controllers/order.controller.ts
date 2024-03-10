@@ -9,6 +9,9 @@ import ejs from "ejs";
 import sendMail from "../utils/sendMail";
 import NotificationModel from "../models/notification.model";
 import { getAllOrdersServices, newOrder } from "../services/order.service";
+import { redis } from "../utils/redis";
+require("dotenv").config();
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // create order
 export const createOrder = CatchAsyncError(
@@ -97,6 +100,50 @@ export const getAllOrders = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       getAllOrdersServices(res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);
+
+//  send stripe publishble key
+export const sendStripePublishableKey = CatchAsyncError(
+  async (req: Request, res: Response) => {
+    res.status(200).json({
+      publishablekey: process.env.STRIPE_PUBLISHABLE_KEY,
+    });
+  }
+);
+
+// new payment
+export const newPayment = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const myPayment = await stripe.paymentIntents.create({
+        amount: req.body.amount,
+        currency: "USD",
+        description: "E-learning course services",
+        metadata: {
+          company: "E-Learning",
+        },
+        automatic_payment_methods: {
+          enabled: true,
+        },
+        shipping: {
+          name: "Satyajit Sahoo",
+          address: {
+            line1: "Bhubaneswar",
+            postal_code: "728290",
+            city: "Bhubaneswar",
+            state: "Odisha",
+            country: "IN",
+          },
+        },
+      });
+      res.status(201).json({
+        success: true,
+        client_secret: myPayment.client_secret,
+      });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
     }
